@@ -14,6 +14,6 @@ variable "cidr" {
 }
 
 variable "vpc_tags" {
-    type = map
+    type = map(string)
     default = {}
 }
