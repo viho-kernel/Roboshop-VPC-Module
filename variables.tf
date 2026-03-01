@@ -15,6 +15,6 @@ variable "cidr" {
 
 variable "vpc_tags" {
     type = map 
-    default = map
+    default = {}
   
 }
