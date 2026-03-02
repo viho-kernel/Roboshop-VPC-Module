@@ -32,10 +32,15 @@ resource "aws_subnet" "public" {
   count = length(var.public_subnet_cidrs)
   vpc_id = aws_vpc.main.id
   cidr_block = var.public_subnet_cidrs[count.index]
-  availability_zone = each.key
+  availability_zone = local.az_names
 
-tags = {
-  Name = "${var.project}-${var.environment}-Public-Subnet"
-} 
+  tags = merge (
+    local.common_tags,
+    {
+      # Roboshop-dev-us-east-1a
+      Name = "${var.project}-${var.environment}-${local.az_names[count.index]}"
+    },
+    var.az_tags
+  )
     
 }
