@@ -39,7 +39,7 @@ resource "aws_subnet" "public" {
     local.common_tags,
     {
       # Roboshop-dev-us-east-1a
-      Name = "${var.project}-${var.environment}-${local.az_names[count.index]}"
+      Name = "${var.project}-${var.environment}-public-${local.az_names[count.index]}"
     },
     var.az_tags
   )
@@ -83,4 +83,13 @@ resource "aws_subnet" "database" {
     var.az_tags
   )
     
+}
+
+
+resource "aws_route_table" "test" {
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block           = aws_vpc.test.cidr_block
+    network_interface_id = aws_network_interface.test.id
+  }
 }
