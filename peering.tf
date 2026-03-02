@@ -2,7 +2,7 @@ resource "aws_vpc_peering_connection" "default" {
   count = var.is_peering_required ? 1 : 0
 
   peer_vpc_id   = data.aws_vpc.default.id
-  
+
   vpc_id        = aws_vpc.main.id
 
   auto_accept = true
@@ -24,7 +24,7 @@ resource "aws_vpc_peering_connection" "default" {
 }
 
 
-resource "aws_route" "public" {
+resource "aws_route" "public_peering" {
   count = var.is_peering_required ? 1 : 0
   route_table_id            = aws_route_table.public.id
   destination_cidr_block    = data.aws_vpc.default.cidr_block
@@ -32,7 +32,7 @@ resource "aws_route" "public" {
   
 }
 
-resource "aws_route" "private" {
+resource "aws_route" "private_perring" {
   count = var.is_peering_required ? 1 : 0
   route_table_id            = aws_route_table.private.id
   destination_cidr_block    = data.aws_vpc.default.cidr_block
@@ -40,7 +40,7 @@ resource "aws_route" "private" {
   
 }
 
-resource "aws_route" "database" {
+resource "aws_route" "database_peering" {
   count = var.is_peering_required ? 1 : 0
   route_table_id            = aws_route_table.database.id
   destination_cidr_block    = data.aws_vpc.default.cidr_block
