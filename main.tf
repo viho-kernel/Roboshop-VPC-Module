@@ -132,6 +132,33 @@ resource "aws_nat_gateway" "nat" {
   depends_on = [ aws_internet_gateway.main ] 
 }
 
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project}-${var.environment}-Private-RoutTable"
+    },
+    var.private_route_table_tags
+  )
+  
+}
+
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project}-${var.environment}-Database-RoutTable"
+    },
+    var.database_route_table_tags
+  )
+  
+}
+
 resource "aws_route" "private" {
   route_table_id            = aws_route_table.private.id
   destination_cidr_block    = "0.0.0.0/0"
