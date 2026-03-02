@@ -44,3 +44,40 @@ resource "aws_subnet" "public" {
   )
     
 }
+
+resource "aws_subnet" "private" {
+  #for_each = toset(var.availability_zones)
+  count = length(var.private_subnet_cidrs)
+  vpc_id = aws_vpc.main.id
+  cidr_block = var.private_subnet_cidrs[count.index]
+  availability_zone = local.az_names[count.index]
+
+  tags = merge (
+    local.common_tags,
+    {
+      # Roboshop-dev-us-east-1a
+      Name = "${var.project}-${var.environment}-private-${local.az_names[count.index]}"
+    },
+    var.az_tags
+  )
+    
+}
+
+
+resource "aws_subnet" "database" {
+  #for_each = toset(var.availability_zones)
+  count = length(var.database_subnet_cidrs)
+  vpc_id = aws_vpc.main.id
+  cidr_block = var.database_subnet_cidrs[count.index]
+  availability_zone = local.az_names[count.index]
+
+  tags = merge (
+    local.common_tags,
+    {
+      # Roboshop-dev-us-east-1a
+      Name = "${var.project}-${var.environment}-database-${local.az_names[count.index]}"
+    },
+    var.az_tags
+  )
+    
+}
