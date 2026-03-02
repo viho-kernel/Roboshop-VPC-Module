@@ -19,10 +19,23 @@ resource "aws_internet_gateway" "main" {
 
   tags = merge(
     local.common_tags,
-    var.vpc_tags,
+    var.igw_tags,
     {
       Name = "${var.project}-${var.environment}-IGW"
     }
   )
   
+}
+
+resource "aws_subnet" "public" {
+  for_each = toset(var.availability_zones)
+  count = length(var.public_subnet_cidrs)
+  vpc_id = aws_vpc.main.id
+  cidr_block = var.public_subnet_cidrs[count.index]
+  availability_zone = each.key
+
+tags = {
+  Name = "${var.project}-${var.environment}-Public-Subnet"
+} 
+    
 }
